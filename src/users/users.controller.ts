@@ -26,19 +26,19 @@ export class UsersController {
   }
 
   @Get(':uuid')
-  @Roles(Role.ADM, Role.AL, Role.EDT)
+  @Roles(Role.ADM, Role.CL, Role.WR)
   findOne(@Param('uuid') uuid: string) {
     return this.usersService.findOne(uuid);
   }
 
   @Patch(':uuid')
-  @Roles(Role.ADM, Role.AL, Role.EDT)
+  @Roles(Role.ADM, Role.CL, Role.WR)
   update(@Param('uuid') uuid: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(uuid, updateUserDto);
   }
 
   @Delete(':uuid')
-  @Roles(Role.ADM, Role.AL, Role.EDT)
+  @Roles(Role.ADM, Role.CL, Role.WR)
   remove(@Param('uuid') uuid: string) {
     return this.usersService.remove(uuid);
   }
