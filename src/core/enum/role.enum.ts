@@ -1,5 +1,5 @@
 export enum Role {
   ADM = 'admin',
-  EDT = 'editor',
-  AL = 'analyst',
+  WR = 'waiter',
+  CL = 'client',
 }
