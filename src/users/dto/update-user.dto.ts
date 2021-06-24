@@ -1,8 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
-import { Role } from 'src/core/enum/role.enum';
-import { Status } from 'src/core/enum/status.enum';
+import { Role } from '../../core/enum/role.enum';
+import { Status } from '../../core/enum/status.enum';
 import { CreateUserDto } from './create-user.dto';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
