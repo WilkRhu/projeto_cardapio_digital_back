@@ -25,7 +25,12 @@ export class AuthService {
   }
 
   public async login(user) {
-    const paylod = { email: user.email, uuid: user.uuid, roles: user.role };
+    const users = await this.userService.findOneByEmail(user.email);
+    const paylod = {
+      email: users['dataValues'].email,
+      uuid: users['dataValues'].uuid,
+      roles: users['dataValues'].role,
+    };
     return {
       access_token: this.jwtService.sign(paylod),
     };
