@@ -35,7 +35,7 @@ export class User extends Model<CreateUserDto> {
     type: DataType.ENUM,
     values: [Role.ADM, Role.CL, Role.WR],
   })
-  role: string;
+  roles: string;
 
   @Column({
     type: DataType.ENUM,

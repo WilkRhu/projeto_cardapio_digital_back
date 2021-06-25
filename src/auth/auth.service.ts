@@ -36,6 +36,7 @@ export class AuthService {
       email: users['dataValues'].email,
       uuid: users['dataValues'].uuid,
       roles: users['dataValues'].role,
+      status: users['dataValues'].status,
     };
     return {
       access_token: this.jwtService.sign(paylod),

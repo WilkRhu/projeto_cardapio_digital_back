@@ -37,11 +37,11 @@ export class CreateUserDto {
   @IsEnum(Role)
   @ApiProperty({
     description: 'Papel do usuario',
-    name: 'role',
+    name: 'roles',
     enum: Role,
     example: [`${Role.ADM}, ${Role.WR} ou ${Role.CL}`],
   })
-  readonly role: string;
+  readonly roles: string;
 
   @IsEnum(Status)
   @ApiProperty({

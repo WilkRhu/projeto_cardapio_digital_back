@@ -27,15 +27,15 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsEnum(Role)
   @ApiProperty({
     description: 'Primeiro nome',
-    name: 'role',
+    name: 'roles',
     enum: Role,
   })
-  readonly role: string;
+  readonly roles: string;
 
   @IsEnum(Status)
   @ApiProperty({
     description: 'Primeiro nome',
-    name: 'role',
+    name: 'status',
     enum: Status,
   })
   readonly status: string;

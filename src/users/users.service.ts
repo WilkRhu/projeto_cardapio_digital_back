@@ -56,7 +56,10 @@ export class UsersService {
           { ...updateUserDto },
           { where: { uuid }, returning: true },
         );
-        return findUser;
+        return await this.userRepository.findOne({
+          where: { uuid },
+          attributes: { exclude: ['password'] },
+        });
       }
       return {
         status: 404,
