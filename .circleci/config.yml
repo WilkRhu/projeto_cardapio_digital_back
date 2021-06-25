@@ -1,0 +1,21 @@
+version: 2.1
+steps:
+  - run:
+      name: Install JUnit coverage reporter
+      command: yarn add --dev jest-junit
+  - run:
+      name: Run tests with JUnit as reporter
+      command: jest --ci --runInBand --reporters=default --reporters=jest-junit
+      environment:
+        JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
+  - store_test_results:
+      path: ./reports/junit/
+  - store_artifacts:
+      path: ./reports/junit
+orbs:
+  heroku: circleci/heroku@dev:alpha
+  orb-tools: circleci/orb-tools@9.0 
+workflows:
+  heroku_deploy:
+    jobs:
+      - heroku/deploy-via-git
