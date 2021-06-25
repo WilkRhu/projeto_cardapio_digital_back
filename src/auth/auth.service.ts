@@ -35,7 +35,7 @@ export class AuthService {
     const paylod = {
       email: users['dataValues'].email,
       uuid: users['dataValues'].uuid,
-      roles: users['dataValues'].role,
+      roles: users['dataValues'].roles,
       status: users['dataValues'].status,
     };
     return {
