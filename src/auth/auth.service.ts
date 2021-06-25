@@ -26,6 +26,12 @@ export class AuthService {
 
   public async login(user) {
     const users = await this.userService.findOneByEmail(user.email);
+    if (!users) {
+      return {
+        message: 'Users Not Found',
+        status: 404,
+      };
+    }
     const paylod = {
       email: users['dataValues'].email,
       uuid: users['dataValues'].uuid,
