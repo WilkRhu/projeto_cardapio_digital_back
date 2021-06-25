@@ -1,7 +1,7 @@
 import { DocumentBuilder } from '@nestjs/swagger';
 
 const config = new DocumentBuilder()
-  .setTitle('Project Painel')
+  .setTitle('Cardápio Digital')
   .setDescription('Api Cardápio Digital')
   .setVersion('1.0')
   .addTag('users')
