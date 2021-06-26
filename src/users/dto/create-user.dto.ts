@@ -4,7 +4,7 @@ import { Role } from '../../core/enum/role.enum';
 import { Status } from '../../core/enum/status.enum';
 
 export class CreateUserDto {
-  readonly uuid;
+  readonly uuid: string;
 
   @IsString()
   @Length(1, 100)

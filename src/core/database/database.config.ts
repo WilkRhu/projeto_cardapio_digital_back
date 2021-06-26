@@ -1,5 +1,12 @@
+import * as dotenv from 'dotenv';
 import { Dialect } from 'sequelize/types';
 import { IDatabaseConfig } from './interfaces/dbConfig.interface';
+
+dotenv.config({
+  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+});
+
+console.log(process.env.NODE_ENV);
 
 export const databaseConfig: IDatabaseConfig = {
   development: {
