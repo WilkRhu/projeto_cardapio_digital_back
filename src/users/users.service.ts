@@ -14,7 +14,7 @@ export class UsersService {
     return await this.userRepository.create(createUserDto);
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<any> {
     return await this.userRepository.findAll({
       attributes: { exclude: ['password'] },
     });
