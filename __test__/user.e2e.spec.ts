@@ -215,15 +215,17 @@ describe('UsersService', () => {
   });
 
   describe('Roles', () => {
-    it('should user admin router success', async () => {
+    it('should error router admin', async () => {
       const newUserWaiter = await request(app.getHttpServer())
         .post('/api/auth/signup')
         .send(userWaiter);
       const userAll = await request(app.getHttpServer())
         .get('/api/users')
         .set('Authorization', `Bearer ${newUserWaiter.body.token}`);
-      expect(userAll.statusCode).toBe(403);
-      expect(userAll.body.message).toBe('Forbidden resource');
+      expect(userAll.statusCode).toBe(401);
+      expect(userAll.body.message).toBe(
+        'You are not authorized to perform the operation',
+      );
     });
   });
 

@@ -47,7 +47,7 @@ export class UsersService {
     try {
       return await this.userRepository.findOne<User>({
         where: { email },
-        attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
       });
     } catch (error) {
       throw new ExceptionsErrors().errors(error);

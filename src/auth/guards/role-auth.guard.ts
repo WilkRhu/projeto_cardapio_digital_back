@@ -29,17 +29,24 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     const getUserDatabase = await this.userService.findOneById(user.uuid);
-    if (!getUserDatabase) {
+    if (getUserDatabase['dataValues'].roles === 'admin') {
+      const hasRole = () => roles.indexOf(user.roles) > -1;
+      let hasPermission = false;
+      if (hasRole()) {
+        hasPermission = true;
+        return user && hasPermission;
+      }
+    } else if (getUserDatabase['dataValues'].uuid === request.params.uuid) {
+      const hasRole = () => roles.indexOf(user.roles) > -1;
+      let hasPermission = false;
+      if (hasRole()) {
+        hasPermission = true;
+        return user && hasPermission;
+      }
+    } else {
       throw new UnauthorizedException(
         'You are not authorized to perform the operation',
       );
     }
-    const hasRole = () => roles.indexOf(user.roles) > -1;
-    let hasPermission = false;
-    if (hasRole()) {
-      hasPermission = true;
-    }
-
-    return user && hasPermission;
   }
 }
