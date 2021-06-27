@@ -2,28 +2,31 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
+import * as jwt from 'jsonwebtoken';
 import { Sequelize } from 'sequelize-typescript';
 import * as request from 'supertest';
 import { v4 as uuid } from 'uuid';
-import { userCreate } from '../../../../test/mocks/userMocks';
-import { AppModule } from '../../../app.module';
-import { AuthModule } from '../../../auth/auth.module';
-import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../../../auth/guards/role-auth.guard';
-import { JwtStrategy } from '../../../auth/jwt.strategy';
-import { DatabaseModule } from '../../../core/database/database.module';
-import { ConfigService } from '../../../core/shared/config/config.service';
-import { User } from '../../../users/entities/user.entity';
-import { userProviders } from '../../../users/user.providers';
-import { UsersModule } from '../../../users/users.module';
-import { UsersService } from '../../../users/users.service';
+import { AppModule } from '../src/app.module';
+import { AuthModule } from '../src/auth/auth.module';
+import { JwtAuthGuard } from '../src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../src/auth/guards/role-auth.guard';
+import { JwtStrategy } from '../src/auth/jwt.strategy';
+import { DatabaseModule } from '../src/core/database/database.module';
+import { ConfigService } from '../src/core/shared/config/config.service';
+import { User } from '../src/users/entities/user.entity';
+import { userProviders } from '../src/users/user.providers';
+import { UsersModule } from '../src/users/users.module';
+import { UsersService } from '../src/users/users.service';
 import {
+  newCreatedUser,
+  userCreate,
   usercreate,
   usercreate2,
   usercreate3,
   usercreate4,
   userUpdate,
-} from '../mocks/userMock';
+  userWaiter,
+} from './mocks/userMock';
 
 describe('UsersService', () => {
   let app: INestApplication;
@@ -84,18 +87,28 @@ describe('UsersService', () => {
       expect(user.status).toBe(200);
     });
 
+    it('should error authorization return findAll', async () => {
+      const user = await request(app.getHttpServer())
+        .get('/api/users')
+        .set('Authorization', `Bearer ${jwt.sign('test', 'shhhhh')}`);
+      expect(user.body.statusCode).toBe(401);
+      expect(user.body.message).toBe('Unauthorized');
+    });
+
     it('should error unauthorized return findAll', async () => {
       const user = await request(app.getHttpServer()).get('/api/users');
       expect(user.status).toBe(401);
     });
 
-    it.skip('should success return findOne user', async () => {
-      console.log(userCreate.uuid);
+    it('should success return findOne user', async () => {
+      const masterUser = await request(app.getHttpServer())
+        .post('/api/auth/signup')
+        .send(usercreate);
       const userOne = await request(app.getHttpServer())
         .get(`/api/users/${userCreate.uuid}`)
-        .set('Authorization', `Bearer ${userMaster.body.token}`);
+        .set('Authorization', `Bearer ${masterUser.body.token}`);
       expect(userOne.status).toBe(200);
-    });
+    }, 5000);
 
     it('should error return findOne user', async () => {
       const userOne = await request(app.getHttpServer())
@@ -121,7 +134,10 @@ describe('UsersService', () => {
 
   describe('Signup', () => {
     it('should return success create user', async () => {
-      expect(userMaster.status).toBe(201);
+      const newUser = await request(app.getHttpServer())
+        .post('/api/auth/signup')
+        .send(newCreatedUser);
+      expect(newUser.status).toBe(201);
     });
 
     it('should error on create user validation email', async () => {
@@ -151,13 +167,23 @@ describe('UsersService', () => {
         'password must be shorter than or equal to 8 characters',
       );
     });
+
+    it('should error duplicate email', async () => {
+      const user = await request(app.getHttpServer())
+        .post('/api/auth/signup')
+        .send(userCreate);
+      expect(user.body.name).toBe('SequelizeUniqueConstraintError');
+      expect(user.body.message).toBe(
+        'SQLITE_CONSTRAINT: UNIQUE constraint failed: Users.email',
+      );
+    });
   });
 
   describe('Login', () => {
     it('should user login success', async () => {
       const login = await request(app.getHttpServer())
         .post('/api/auth/login')
-        .send({ email: usercreate.email, password: usercreate.password });
+        .send({ email: userCreate.email, password: userCreate.password });
       expect(login.status).toBe(201);
     });
 
@@ -177,6 +203,27 @@ describe('UsersService', () => {
       expect(loginMail.body.message[0]).toBe(
         'password must be longer than or equal to 1 characters',
       );
+    });
+
+    it('should error user notfound', async () => {
+      const loginUser = await request(app.getHttpServer())
+        .post('/api/auth/login')
+        .send({ email: 'fulano@email.com', password: usercreate.password });
+      expect(loginUser.body.error.status).toBe(404);
+      expect(loginUser.body.error.message).toBe('User Not Found!');
+    });
+  });
+
+  describe('Roles', () => {
+    it('should user admin router success', async () => {
+      const newUserWaiter = await request(app.getHttpServer())
+        .post('/api/auth/signup')
+        .send(userWaiter);
+      const userAll = await request(app.getHttpServer())
+        .get('/api/users')
+        .set('Authorization', `Bearer ${newUserWaiter.body.token}`);
+      expect(userAll.statusCode).toBe(403);
+      expect(userAll.body.message).toBe('Forbidden resource');
     });
   });
 

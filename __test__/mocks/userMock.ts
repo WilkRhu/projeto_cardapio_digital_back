@@ -1,9 +1,50 @@
 import * as faker from 'faker';
-import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { v4 as uuid } from 'uuid';
 import { Role } from '../../src/core/enum/role.enum';
 import { Status } from '../../src/core/enum/status.enum';
-import { CreateUserDto } from '../../src/users/dto/create-user.dto';
+import { UserMockDto } from '../../src/users/dto/user.mock.dto';
+
+export const usercreate: UserMockDto = {
+  name: faker.internet.userName(),
+  email: faker.internet.email(),
+  password: faker.internet.password(8),
+  roles: Role.ADM,
+  status: Status.ACT,
+};
+
+export const newCreatedUser: UserMockDto = {
+  name: faker.internet.userName(),
+  email: faker.internet.email(),
+  password: faker.internet.password(8),
+  roles: Role.ADM,
+  status: Status.ACT,
+};
+
+export const usercreate2: UserMockDto = {
+  ...usercreate,
+  email: 'no-email',
+};
+
+export const usercreate3: UserMockDto = {
+  ...usercreate,
+  password: '',
+};
+
+export const usercreate4: UserMockDto = {
+  ...usercreate,
+  password: faker.internet.password(10),
+};
+
+export const userUpdate = {
+  name: faker.internet.userName(),
+};
+
+export const userWaiter: UserMockDto = {
+  ...usercreate,
+  email: faker.internet.email(),
+  roles: Role.WR,
+};
 
 export const userCreate: CreateUserDto = {
   uuid: uuid(),
@@ -32,14 +73,6 @@ export const userAll = [
     status: Status.ACT,
   },
 ];
-
-export const userUpdate: UpdateUserDto = {
-  name: 'Fulano de Tal',
-  email: faker.internet.email(),
-  password: faker.internet.password(8),
-  roles: Role.ADM,
-  status: Status.ACT,
-};
 
 export const removeUser = 'User Deleted Success!';
 
