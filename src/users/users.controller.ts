@@ -9,13 +9,13 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuardTotal } from '../auth/guards/role-total.guard';
+import { RolesGuard } from '../auth/guards/role-auth.guard';
 import { Roles } from '../core/decorator/role.decorator';
 import { Role } from '../core/enum/role.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
-@UseGuards(JwtAuthGuard, RolesGuardTotal)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
