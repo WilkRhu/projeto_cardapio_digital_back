@@ -14,19 +14,19 @@ import { JwtStrategy } from '../src/auth/jwt.strategy';
 import { DatabaseModule } from '../src/core/database/database.module';
 import { ConfigService } from '../src/core/shared/config/config.service';
 import { User } from '../src/users/entities/user.entity';
+import { userProviders } from '../src/users/user.providers';
+import { UsersModule } from '../src/users/users.module';
+import { UsersService } from '../src/users/users.service';
 import {
   newCreatedUser,
+  userCreate,
   usercreate,
   usercreate2,
   usercreate3,
   usercreate4,
   userUpdate,
   userWaiter,
-} from '../src/users/test/mocks/userMock';
-import { userProviders } from '../src/users/user.providers';
-import { UsersModule } from '../src/users/users.module';
-import { UsersService } from '../src/users/users.service';
-import { userCreate } from './mocks/userMocks';
+} from './mocks/userMock';
 
 describe('UsersService', () => {
   let app: INestApplication;

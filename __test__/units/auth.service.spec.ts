@@ -2,19 +2,19 @@ import { forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
+import { AuthController } from '../../src/auth/auth.controller';
+import { AuthService } from '../../src/auth/auth.service';
+import { JwtStrategy } from '../../src/auth/jwt.strategy';
+import { USER_REPOSITORY } from '../../src/core/constants/constants';
+import { userProviders } from '../../src/users/user.providers';
+import { UsersModule } from '../../src/users/users.module';
 import { UsersService } from '../../src/users/users.service';
 import {
   returnCreateUser,
   returnLoginSuccess,
   returnUserByEmail,
-} from '../../test/mocks/returnUserMock';
-import { validateUser } from '../../test/mocks/userMocks';
-import { USER_REPOSITORY } from '../core/constants/constants';
-import { userProviders } from '../users/user.providers';
-import { UsersModule } from '../users/users.module';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { JwtStrategy } from './jwt.strategy';
+} from '../mocks/returnUserMock';
+import { validateUser } from '../mocks/userMock';
 
 describe('AuthService', () => {
   let service: AuthService;

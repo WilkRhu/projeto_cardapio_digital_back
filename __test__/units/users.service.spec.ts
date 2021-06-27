@@ -1,14 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { v4 as uuid } from 'uuid';
-import {
-  removeUser,
-  userAll,
-  userCreate,
-  userUpdate,
-} from '../../test/mocks/userMocks';
-import { USER_REPOSITORY } from '../core/constants/constants';
-import { userProviders } from './user.providers';
-import { UsersService } from './users.service';
+import { USER_REPOSITORY } from '../../src/core/constants/constants';
+import { userProviders } from '../../src/users/user.providers';
+import { UsersService } from '../../src/users/users.service';
+import { removeUser, userAll, userCreate, userUpdate } from '../mocks/userMock';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -42,7 +37,7 @@ describe('UsersService', () => {
 
   it('should success update', async () => {
     jest.spyOn(service, 'update').mockImplementation(() => userUpdate[0]);
-    const update = await service.update(uuid(), userUpdate);
+    const update = await service.update(uuid(), userUpdate[0]);
     console.log(update);
     expect(update).toBe(userUpdate[0]);
   });
