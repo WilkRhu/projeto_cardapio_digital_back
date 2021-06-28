@@ -6,17 +6,17 @@ import * as jwt from 'jsonwebtoken';
 import { Sequelize } from 'sequelize-typescript';
 import * as request from 'supertest';
 import { v4 as uuid } from 'uuid';
-import { AppModule } from '../src/app.module';
-import { AuthModule } from '../src/auth/auth.module';
-import { JwtAuthGuard } from '../src/auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../src/auth/guards/role-auth.guard';
-import { JwtStrategy } from '../src/auth/jwt.strategy';
-import { DatabaseModule } from '../src/core/database/database.module';
-import { ConfigService } from '../src/core/shared/config/config.service';
-import { User } from '../src/users/entities/user.entity';
-import { userProviders } from '../src/users/user.providers';
-import { UsersModule } from '../src/users/users.module';
-import { UsersService } from '../src/users/users.service';
+import { AppModule } from '../../src/app.module';
+import { AuthModule } from '../../src/auth/auth.module';
+import { JwtAuthGuard } from '../../src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../src/auth/guards/role-auth.guard';
+import { JwtStrategy } from '../../src/auth/jwt.strategy';
+import { DatabaseModule } from '../../src/core/database/database.module';
+import { ConfigService } from '../../src/core/shared/config/config.service';
+import { User } from '../../src/users/entities/user.entity';
+import { userProviders } from '../../src/users/user.providers';
+import { UsersModule } from '../../src/users/users.module';
+import { UsersService } from '../../src/users/users.service';
 import {
   newCreatedUser,
   userCreate,
@@ -26,7 +26,7 @@ import {
   usercreate4,
   userUpdate,
   userWaiter,
-} from './mocks/userMock';
+} from '../mocks/userMock';
 
 describe('UsersService', () => {
   let app: INestApplication;
