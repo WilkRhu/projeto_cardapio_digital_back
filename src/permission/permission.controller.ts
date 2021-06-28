@@ -8,8 +8,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/role-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/role-auth.guard';
 import { Roles } from '../core/decorator/role.decorator';
 import { Role } from '../core/enum/role.enum';
 import { CreatePermissionDto } from './dto/create-permission.dto';
