@@ -1,9 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { v4 as uuid } from 'uuid';
-import { USER_REPOSITORY } from '../../src/core/constants/constants';
-import { userProviders } from '../../src/users/user.providers';
-import { UsersService } from '../../src/users/users.service';
-import { removeUser, userAll, userCreate, userUpdate } from '../mocks/userMock';
+import { USER_REPOSITORY } from '../../../src/core/constants/constants';
+import { userProviders } from '../../../src/users/user.providers';
+import { UsersService } from '../../../src/users/users.service';
+import {
+  removeUser,
+  userAll,
+  userCreate,
+  userUpdate,
+} from '../../mocks/userMock';
 
 describe('UsersService', () => {
   let service: UsersService;
