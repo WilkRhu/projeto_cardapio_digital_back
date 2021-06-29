@@ -4,5 +4,5 @@ export enum PermissionEnum {
   CR = 'create',
   ED = 'edit',
   DEL = 'deleted',
-  ALT = 'alter-permission',
+  ALT = 'alter_permission',
 }

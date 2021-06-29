@@ -6,8 +6,7 @@ dotenv.config({
   path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
 });
 
-console.log(process.env.NODE_ENV);
-
+console.log(process.env.DB_DIALECT);
 export const databaseConfig: IDatabaseConfig = {
   development: {
     username: process.env.DB_USER,
@@ -15,7 +14,7 @@ export const databaseConfig: IDatabaseConfig = {
     database: process.env.DB_NAME_DEVELOPMENT,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: process.env.DB_DIALECT,
+    dialect: process.env.DB_DIALECT as Dialect,
   },
   test: {
     dialect: process.env.DB_DIALECT as Dialect,
@@ -27,6 +26,6 @@ export const databaseConfig: IDatabaseConfig = {
     password: process.env.DB_PASS,
     database: process.env.DB_NAME_PRODUCTION,
     host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
+    dialect: process.env.DB_DIALECT as Dialect,
   },
 };
