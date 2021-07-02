@@ -22,6 +22,7 @@ export class PermissionController {
 
   @Post()
   @Roles(Role.ADM)
+  @ApiBearerAuth('JWT-auth')
   create(@Body() createPermissionDto: CreatePermissionDto) {
     return this.permissionsService.create(createPermissionDto);
   }
@@ -32,15 +33,15 @@ export class PermissionController {
     return this.permissionsService.findAll();
   }
 
-  @Get(':id')
+  @Get(':userUuid')
   @ApiBearerAuth('JWT-auth')
   @ApiParam({
-    name: 'id',
-    type: 'number',
+    name: 'userUuid',
+    type: 'string',
   })
   @Roles(Role.ADM)
-  findOne(@Param('id') id: number) {
-    return this.permissionsService.findOne(id);
+  findOne(@Param('userUuid') userUuid: string) {
+    return this.permissionsService.findOne(userUuid);
   }
 
   // @Patch(':id')

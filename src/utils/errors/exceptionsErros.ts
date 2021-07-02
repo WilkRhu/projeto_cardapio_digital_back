@@ -2,7 +2,10 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class ExceptionsErrors {
   public errors(data) {
-    if (data.name === 'SequelizeUniqueConstraintError') {
+    if (
+      data.name === 'SequelizeUniqueConstraintError' ||
+      data.name === 'SequelizeForeignKeyConstraintError'
+    ) {
       return new HttpException(
         {
           name: data.name,
