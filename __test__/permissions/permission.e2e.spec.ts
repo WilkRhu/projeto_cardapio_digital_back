@@ -11,12 +11,12 @@ import { RolesGuard } from '../../src/auth/guards/role-auth.guard';
 import { JwtStrategy } from '../../src/auth/jwt.strategy';
 import { DatabaseModule } from '../../src/core/database/database.module';
 import { ConfigService } from '../../src/core/shared/config/config.service';
-import { Permission } from '../../src/permission/entities/permission.entity';
+import { PermissionsUsers } from '../../src/permission/entities/permission.entity';
+import { PermissionEnumEntity } from '../../src/permission/entities/permission.enum.entity';
 import { permissionProvider } from '../../src/permission/permission.provider';
 import { PermissionService } from '../../src/permission/permission.service';
 import { User } from '../../src/users/entities/user.entity';
 import { UsersModule } from '../../src/users/users.module';
-import { permissionCreate } from '../mocks/permissionMock';
 import { userCreate } from '../mocks/userMock';
 
 describe('UsersService', () => {
@@ -48,7 +48,7 @@ describe('UsersService', () => {
           provide: 'SEQUELIZE',
           useFactory: (configService: ConfigService) => {
             sequelize = new Sequelize(configService.sequelizeOrmConfig);
-            sequelize.addModels([Permission]);
+            sequelize.addModels([User, PermissionsUsers, PermissionEnumEntity]);
             return sequelize;
           },
           inject: [ConfigService],
@@ -71,21 +71,34 @@ describe('UsersService', () => {
 
     permissionMaster = await request(app.getHttpServer())
       .post('/api/permission')
-      .set('Authorization', `Bearer ${userMaster['body']['token']}`)
-      .send(permissionCreate);
+      .send({
+        userUuid: userMaster['body']['user']['uuid'],
+        permissionId: [1, 2, 3],
+      })
+      .set('Authorization', `Bearer ${userMaster['body']['token']}`);
   });
 
   describe('Permission', () => {
-    it('should success return findAll', async () => {
-      const permission = await request(app.getHttpServer())
-        .get('/api/permission')
+    it('should error create permission', async () => {
+      const createPermission = await request(app.getHttpServer())
+        .post('/api/permission')
+        .send({
+          userUuid: userMaster['body']['user']['uuid'],
+          permissionId: 1,
+        })
         .set('Authorization', `Bearer ${userMaster['body']['token']}`);
-      expect(permission.status).toBe(200);
+      expect(createPermission.status).toBe(400);
+      expect(createPermission.body.message[0]).toBe(
+        'permissionId must be an array',
+      );
     });
   });
 
   afterAll(async () => {
-    await Permission.destroy({
+    await PermissionsUsers.destroy({
+      truncate: true,
+    });
+    await PermissionEnumEntity.destroy({
       truncate: true,
     });
     await User.destroy({

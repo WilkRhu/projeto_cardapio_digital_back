@@ -6,7 +6,6 @@ dotenv.config({
   path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
 });
 
-console.log(process.env.DB_DIALECT);
 export const databaseConfig: IDatabaseConfig = {
   development: {
     username: process.env.DB_USER,
@@ -18,7 +17,7 @@ export const databaseConfig: IDatabaseConfig = {
   },
   test: {
     dialect: process.env.DB_DIALECT as Dialect,
-    storage: process.env.DB_STORAGE,
+    storage: 'src/core/database/test.sqlite',
     secretOrKey: process.env.JWTKEY,
   },
   production: {

@@ -13,6 +13,8 @@ import { RolesGuard } from '../../src/auth/guards/role-auth.guard';
 import { JwtStrategy } from '../../src/auth/jwt.strategy';
 import { DatabaseModule } from '../../src/core/database/database.module';
 import { ConfigService } from '../../src/core/shared/config/config.service';
+import { PermissionsUsers } from '../../src/permission/entities/permission.entity';
+import { PermissionEnumEntity } from '../../src/permission/entities/permission.enum.entity';
 import { User } from '../../src/users/entities/user.entity';
 import { userProviders } from '../../src/users/user.providers';
 import { UsersModule } from '../../src/users/users.module';
@@ -57,7 +59,7 @@ describe('UsersService', () => {
           provide: 'SEQUELIZE',
           useFactory: (configService: ConfigService) => {
             sequelize = new Sequelize(configService.sequelizeOrmConfig);
-            sequelize.addModels([User]);
+            sequelize.addModels([User, PermissionsUsers, PermissionEnumEntity]);
             return sequelize;
           },
           inject: [ConfigService],
@@ -209,8 +211,10 @@ describe('UsersService', () => {
       const loginUser = await request(app.getHttpServer())
         .post('/api/auth/login')
         .send({ email: 'fulano@email.com', password: usercreate.password });
-      expect(loginUser.body.error.status).toBe(404);
-      expect(loginUser.body.error.message).toBe('User Not Found!');
+      expect(loginUser.error['status']).toBe(404);
+      expect(loginUser.error['text']).toBe(
+        '{"error":{"status":404,"message":"User Not Found!"}}',
+      );
     });
   });
 
