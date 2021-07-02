@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Permission } from '../../permission/entities/permission.entity';
+import { PermissionEnumEntity } from '../../../src/permission/entities/permission.enum.entity';
+import { PermissionsUsers } from '../../permission/entities/permission.entity';
 import { User } from '../../users/entities/user.entity';
 import {
   DEVELOPMENT,
@@ -28,7 +29,7 @@ export const databaseProviders = [
           config = databaseConfig.development;
       }
       const sequelize = new Sequelize(config);
-      sequelize.addModels([User, Permission]);
+      sequelize.addModels([User, PermissionsUsers, PermissionEnumEntity]);
       await sequelize.sync();
       return sequelize;
     },

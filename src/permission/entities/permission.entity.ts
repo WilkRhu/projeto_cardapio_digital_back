@@ -1,9 +1,18 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
-import { PermissionEnum } from '../../core/enum/permission.enum';
+import { IsUUID } from 'class-validator';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { User } from '../../users/entities/user.entity';
 import { CreatePermissionDto } from '../dto/create-permission.dto';
+import { PermissionEnumEntity } from './permission.enum.entity';
 
 @Table
-export class Permission extends Model<CreatePermissionDto> {
+export class PermissionsUsers extends Model<CreatePermissionDto> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
@@ -11,22 +20,22 @@ export class Permission extends Model<CreatePermissionDto> {
   })
   id: number;
 
+  @IsUUID(4)
+  @ForeignKey(() => User)
   @Column({
-    type: DataType.STRING,
     allowNull: false,
   })
-  name: string;
+  userUuid: string;
 
+  @ForeignKey(() => PermissionEnumEntity)
   @Column({
-    type: DataType.ENUM,
-    values: [
-      PermissionEnum.ALT,
-      PermissionEnum.All,
-      PermissionEnum.CR,
-      PermissionEnum.DEL,
-      PermissionEnum.ED,
-      PermissionEnum.VW,
-    ],
+    allowNull: false,
   })
-  permission: string;
+  permissionId: number;
+
+  @BelongsTo(() => User)
+  user: User[];
+
+  @BelongsTo(() => PermissionEnumEntity)
+  permissions: PermissionEnumEntity[];
 }

@@ -1,32 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsString, Length } from 'class-validator';
-import { PermissionEnum } from '../../core/enum/permission.enum';
+import { IsArray, IsString } from 'class-validator';
 
 export class CreatePermissionDto {
   readonly id: number;
   @IsString()
-  @Length(1, 100)
   @ApiProperty({
-    description: 'Nome Da permissão',
+    description: 'UUID do usuário',
     minLength: 1,
-    maxLength: 100,
-    example: 'name',
+    maxLength: 8,
+    example: 'ufkfk-7657lbbv-lkjb',
   })
-  readonly name: string;
+  readonly userUuid: any;
 
-  @IsEnum(PermissionEnum)
+  @IsArray()
   @ApiProperty({
-    description: 'Permissão',
-    name: 'permission',
-    enum: PermissionEnum,
-    example: [
-      PermissionEnum.ALT,
-      PermissionEnum.All,
-      PermissionEnum.CR,
-      PermissionEnum.DEL,
-      PermissionEnum.ED,
-      PermissionEnum.VW,
-    ],
+    description: 'id da permissão',
+    minLength: 1,
+    maxLength: 8,
+    example: '1',
   })
-  readonly permission: string;
+  readonly permissionId: any;
 }

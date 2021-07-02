@@ -1,15 +1,24 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  Column,
+  DataType,
+  Default,
+  HasMany,
+  IsUUID,
+  Model,
+  PrimaryKey,
+  Table,
+} from 'sequelize-typescript';
 import { Role } from '../../core/enum/role.enum';
 import { Status } from '../../core/enum/status.enum';
+import { PermissionsUsers } from '../../permission/entities/permission.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 
 @Table
 export class User extends Model<CreateUserDto> {
-  @Column({
-    type: DataType.UUID,
-    defaultValue: DataType.UUIDV1,
-    primaryKey: true,
-  })
+  @IsUUID(4)
+  @PrimaryKey
+  @Default(DataType.UUIDV4)
+  @Column
   uuid: string;
 
   @Column({
@@ -42,4 +51,7 @@ export class User extends Model<CreateUserDto> {
     values: [Status.ACT, Status.DES],
   })
   status: string;
+
+  @HasMany(() => PermissionsUsers)
+  permissions: PermissionsUsers;
 }
