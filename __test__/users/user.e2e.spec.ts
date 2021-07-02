@@ -85,7 +85,7 @@ describe('UsersService', () => {
         .get('/api/users')
         .set('Authorization', `Bearer ${userMaster['body']['token']}`);
       expect(user.status).toBe(200);
-    });
+    }, 5000);
 
     it('should error authorization return findAll', async () => {
       const user = await request(app.getHttpServer())
