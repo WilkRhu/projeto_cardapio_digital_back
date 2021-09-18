@@ -1,11 +1,15 @@
 import {
   Body,
+  CacheInterceptor,
+  CacheKey,
+  CacheTTL,
   Controller,
   Delete,
   Get,
   Param,
   Patch,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -23,6 +27,9 @@ export class UsersController {
   @Roles(Role.ADM)
   @Get()
   @ApiBearerAuth('JWT-auth')
+  @CacheKey('allUser')
+  @CacheTTL(20)
+  @UseInterceptors(CacheInterceptor)
   findAll() {
     return this.usersService.findAll();
   }

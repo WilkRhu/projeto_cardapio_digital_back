@@ -1,4 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
+import { Cache } from 'cache-manager';
 import { USER_REPOSITORY } from '../core/constants/constants';
 import { ExceptionsErrors } from '../utils/errors/exceptionsErros';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -9,6 +16,7 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: typeof User,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -17,9 +25,15 @@ export class UsersService {
 
   async findAll(): Promise<any> {
     try {
-      return await this.userRepository.findAll({
+      const findAll = await this.userRepository.findAll({
         attributes: { exclude: ['password'] },
       });
+      if (!findAll) {
+        throw new HttpException('Users not found!', HttpStatus.NOT_FOUND);
+      }
+
+      await this.cacheManager.set('users', findAll);
+      return findAll;
     } catch (error) {
       throw new ExceptionsErrors().errors(error);
     }
