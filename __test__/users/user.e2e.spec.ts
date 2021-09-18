@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { CacheModule, INestApplication, ValidationPipe } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
@@ -47,6 +47,10 @@ describe('UsersService', () => {
         JwtModule.register({
           secret: process.env.JWTKEY,
           signOptions: { expiresIn: process.env.TOKEN_EXPIRATION },
+        }),
+        CacheModule.register({
+          ttl: 20,
+          max: 100,
         }),
       ],
       providers: [

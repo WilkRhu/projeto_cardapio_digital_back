@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/role-auth.guard';
@@ -9,6 +9,12 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
 @Module({
+  imports: [
+    CacheModule.register({
+      ttl: 20,
+      max: 100,
+    }),
+  ],
   controllers: [UsersController],
   providers: [
     UsersService,

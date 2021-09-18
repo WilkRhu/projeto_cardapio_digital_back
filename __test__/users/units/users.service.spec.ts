@@ -1,3 +1,4 @@
+import { CacheModule } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { v4 as uuid } from 'uuid';
 import { USER_REPOSITORY } from '../../../src/core/constants/constants';
@@ -15,6 +16,12 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        CacheModule.register({
+          ttl: 20,
+          max: 100,
+        }),
+      ],
       providers: [UsersService, ...userProviders],
       exports: [USER_REPOSITORY],
     }).compile();
